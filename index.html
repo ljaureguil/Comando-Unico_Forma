@@ -1,0 +1,435 @@
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width">
+
+</head>
+<style>
+    body {
+        background-color: #ffffff;
+        font-size: 25px;
+    }
+    button {
+        font-size: 25px;
+        border-radius: 50px;
+        background: blue;
+        color: white;
+        box-shadow: -20px 20px 20px 2px rgba(0, 0, 0, .4);
+        width: 95%;
+    }
+    #todo {
+        // text-align: center;
+        height: 200%;
+    }
+    input {
+        font-size: 25px;
+        // border-radius: 10px;
+        border-style: solid;
+        background: #c5f5c5;
+        width: 100%;
+    }
+    .centradas {
+        // border-radius: 10px;
+        border-style: solid;
+    }
+    #clip {
+        height: 100%;
+        width: 100%;
+        background: #c3e534;
+    }
+    #precio {
+        background: #c5c5f5;
+    }
+    #fecha {
+        background: #c5c5f5;
+    }
+    #nota {
+        width: 100%;
+        height: 5%;
+    }
+    #deposito {} #tcontrato {
+        position: absolute;
+        width: 100%;
+        ;
+        height: 100%;
+        font-size: 9px;
+        font-weight: bold;
+        top: 0%;
+        left: 0%;
+        display: none;
+        padding: 15px;
+        font-weight: bold;
+    }
+    #bc {
+        background: red;
+    }
+    #cblnk {
+        background: #FF6347;
+    }
+    #ref {
+        width: 10%;
+        font-size: 10px;
+        position: absolute;
+        top: 3%;
+        right: 3%;
+    }
+</style>
+
+<div id="todo">Para alluda habla al:
+    <br>209 665 8321;
+    <button id="ref" onclick="if(confirm('Estas Seguro??')) window.location.reload();">Refresh</button>
+    <div id="intradas">
+        <p></p>
+        Nombre
+        <input id="nombre" type="text" class="centradas">
+        <bf>
+            <p></p>
+            Fecha del event
+            <input id="fecha" type="date" class="centradas" readonly=true>
+            <br>
+            <p></p>
+            Direccion
+            <input id="direccion" type="text" class="centradas">
+            <p></p>
+            Telefono
+            <input id="telefono" type="tel" class="centradas">
+
+
+
+            <p></p>
+            Inicia
+            <input id="inic" type="time" class="centradas" value="16:00" oninput="adjTime('in')">
+            <p></p>
+            Horas
+            <input id="horas" type="number" class="centradas" oninput="adjTime('h')">
+
+
+            <p></p>
+            Termina
+            <input id="end" type="time" class="centradas" readonly=true>
+            <p></p>
+
+            Precio/hora
+            <input id="precio" type="number" class="centradas" readonly=true>
+            <p id="deposito">Deposito</p>
+
+
+            <p></p>
+            <p id="total">Total:</p>
+            <p></p>
+            <p id="resto">Restando</p>
+
+            <p></p>
+            Nota
+            <textarea id="nota" type="text" class="centradas"></textarea>
+
+
+            <br>
+            <br>
+            <button id="done" onclick="setFecha()">Enviar forma</button>
+            <br>
+            <br>
+
+            <br>Para alluda habla al:
+            <br>209 665 8321
+            <br>
+            <button id="cblnk" onclick="openContratoBlank()">Abrir Contrato en Blanco</button>
+
+            <br>
+            <br>
+            <textarea id="clip" class="centradas" readonly>===============</textarea>
+
+    </div>
+
+
+</div>
+
+<textarea id="tcontrato" readonly=true></textarea>
+
+<script>
+    var objT = {}, nu = "",
+        fnd = null,
+        clavec = "";
+    var r = 0;
+    var m = "Jan,Feb,Mar,Apr,May,Ju,Jul,Aug,Sep,Oct,Nov,Dec";
+    var dd = "Sunday,Monday,Tusday,Wedsnesday,Thursday,Friday,Saturday";
+    dd = dd.split(",");
+    m = m.split(",");
+    var continua = false;
+    nn = "\nESTA FORMA SOLO ES PARA INFORMACION DE LA AGENDA\nDESPUES DE HAVER RECIBIDO ESTA FORMA SE DARA MAXIMO 2 DIAS PARA EL DEPOSITO Y SERRAR FECHA, DESPUES DE ESTOS 2 DIAS SE PERDERA LA PRIORIDAD Y PODRIA DARSE A OTRA PERSONA QUE LA REQUIERA."
+    nn += "\n\nPara cualquier duda hable al (209) 665-8321"
+    var cl = "",
+        np = -1,
+        OFO, ofo = {
+            fms: []
+        };
+ 
+   loadDoc("https://raw.githubusercontent.com/ljaureguil/Comando-Unico-Forma/main/con.txt",function(c){
+             regreso(c,21,function(res){
+                   result = Function("return " + res)();
+                   start()
+        })
+   })
+    function start() {
+
+
+        var i = 0;
+        np = prompt("El pin y clave estan en el mismo texto donde estaba este link.\n\n Type Pin (solo numeros)...")
+        clave = prompt(nn + "\n\nLa clave esta en el mismo texto donde esta el link de esta forma:\n\nType Clave: ");
+
+        if (clave==="" || np==="" ||clave === null || clave === undefined || np === null || np === undefined) {
+            //start();
+            window.location.reload();
+        }
+        else{
+        //     if(np.lenght<2 || clave.length<3)   window.location.reload();
+            clave.trim();
+            np.trim();
+            np=np*1;
+        clave = clave.toUpperCase().trim();
+
+
+        clavec = convert(':"' + clave, np);
+        // alert( clavec);
+
+        if (linkfo) {
+            GetJ(linkfo, function(ofo) {
+                OFO = ofo;
+                var afo = ofo.fms;
+
+                for (var ii = 0; ii < afo.length; ii++) {
+                    if (afo[ii].indexOf(clavec) > -1) {
+
+                        regreso(afo[ii], np, function(res) {
+
+                            if (res[0] === "{") {
+                                var c = JSON.parse(res)
+
+                                fnd = c;
+                                ii = afo.lenght;
+
+                            }
+                        });
+                    }
+
+                }
+                if (fnd != null) {
+                    var o = fnd;
+
+                    deposito.innerHTML = "Deposito: " + o.d;
+                    fecha.value = o.fecha;
+                    precio.value = o.p * 1;
+                    nota.value = o.n;
+                    fecha.value = o.f;
+
+
+                } else {
+                    alert("Clave o Pin incorrecto...\n\nPara alluda habla al 209 6658321");
+                    window.location.reload();
+                }
+            })
+        }
+}
+    }
+
+    var re = 0,
+        auto = true;
+
+
+    function setFecha() {
+        alert(nn);
+        if (nombre.value.length > 0 && horas.value * 1 > 0) {
+            if (linkfo) {
+                GetJ(linkfo, function(ofo) {
+                    OFO = ofo;
+                    var afo = ofo.fms;
+
+                    for (var ii = 0; ii < afo.length; ii++) {
+                        if (afo[ii].indexOf(clavec) > -1) {
+
+                            regreso(afo[ii], np, function(res) {
+
+                                if (res[0] === "{") {
+                                    var c = JSON.parse(res)
+                                    fnd = {
+                                        "fe": c,
+                                        "indice": ii
+                                    }
+
+                                    ii = afo.lenght;
+
+                                }
+                            });
+                        }
+
+                    }
+                    if (fnd != null) {
+                        var o = fnd.fe;
+                        var fe = fecha.value.split("-");
+                        fe = m[fe[1] * 1 - 1] + " " + fe[2] + " de " + fe[0];
+
+                        var a = inic.value.split(" ")[0];
+                        a = a.split(":")[0] * 1 + a.split(":")[1] * 1;
+
+                        o.re = new Date().toString().split("GMT")[0];
+                        o.no = nombre.value;
+                        o.t = telefono.value;
+                        o.di = direccion.value;
+                        o.h = horas.value;
+                        o.i = inic.value;
+                        o.n = nota.value;
+                        o.st = "returned"
+                        var cc = JSON.stringify(o);
+                        cc = convert(cc, np);
+                        ofo.fms[fnd.indice] = cc;
+                        UpdateJ(linkfo, ofo, function() {
+                            alert("Forma a sido enviada.....")
+                        })
+                    } else {
+                        alert("Escribe de nuevo el pin y la clave")
+                    }
+                })
+            }
+        } else alert("Informacion Incompleta, intenta de nuevo")
+    }
+
+    function getForma(obj, clave) {
+        var i = 0;
+        if (obj.pending != undefined) {
+            for (i = 0; i < obj.pending.length; i++) {
+                o = obj.pending[i];
+                if (o.clave.toUpperCase() === clave.toUpperCase() && o.status) {
+                    return o;
+                }
+            }
+            return undefined;
+        } else return undefined
+
+    }
+
+    function GetJ(url, callback) {
+        var xhr = new XMLHttpRequest()
+        xhr.open('GET', url + '/1', true)
+        xhr.onload = function() {
+            //     alert(xhr.responseText)
+
+            var users = JSON.parse(xhr.responseText);
+            if (xhr.readyState == 4 && xhr.status == "200") {
+                //	console.table(users);
+                callback(users);
+            } else {
+                console.error(users);
+            }
+        }
+        xhr.send(null);
+    }
+
+    function UpdateJ(url, ob, callback) {
+        var json = JSON.stringify(ob);
+
+        var xhr = new XMLHttpRequest();
+        xhr.open("PUT", url + '/12', true);
+        xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+        xhr.onload = function() {
+            var users = JSON.parse(xhr.responseText);
+            if (xhr.readyState == 4 && xhr.status == "200") {
+                if (callback != undefined) callback(users);
+            } else {
+                (users);
+            }
+        }
+        xhr.send(json);
+    }
+
+    function adjTime(v) {
+        var i = inic.value,
+            e = end.value * 1,
+            h = horas.value * 1,
+            p = precio.value * 1;
+        iph = i.split(":")[0] * 1;
+        ipm = i.split(":")[1];
+        fh = iph * 1 + h;
+        if (fh >= 24) fh = fh - 24;
+        fh = fh + "";
+        if (fh.length === 1) fh = "0" + fh;
+        end.value = fh + ":" + ipm;
+    }
+    eco = document.getElementById("tcontrato")
+    var linkContrato = "https://raw.githubusercontent.com/ljaureguil/Comando-Unico-Inic/main/Contrato.txt"
+
+        function loadDoc(url, callback) {
+            var xhttp = new XMLHttpRequest();
+            xhttp.open("GET", url, false);
+            xhttp.send();
+            if (callback != undefined) callback(xhttp.responseText);
+            return xhttp.responseText
+        }
+
+        function openContratoBlank() {
+            loadDoc(linkContrato, function(doc) {
+                eco.value = doc;
+                clip.value = doc;
+
+                if (eco.style.display === "block") {
+                    eco.style.display = "none";
+                    cblnk.innerHTML = "Abrir me Contrato";
+
+                } else {
+
+                    eco.style.display = "block";
+                    cblnk.innerHTML = "Cerrar Contrato";
+                    alert("TAKE A SCREEN SHOT DESPUES DE PRECIONAR 'OK'\n\nEste Contrato no tiene valides hasta que se haya dado el Deposito");
+                }
+
+                document.location.href = "#top";
+            })
+
+        }
+
+        function getFecha(fe) {
+            var fe = efecha.value.split("-");
+            var nd = new Date();
+            nd.setFullYear(fe[0] * 1);
+            nd.setMonth(fe[1] * 1 - 1); // alert(fe[1])
+            nd.setDate(fe[2] * 1);
+            var nf = nd.getDay();
+            return m[fe[1] * 1 - 1] + " " + fe[2] * 1 + " " + fe[0] * 1 + " (" + dd[nf * 1] + ")";
+        }
+
+        function getHora(h) {
+            h - h * 1;
+            if (h.indexOf(":") >= 1) {
+                var hm = h.split(":");
+                h = hm[0] * 1;
+                mi = hm[1];
+                if (h > 12) {
+                    h = h - 12;
+                    h = h + ":" + mi + " PM";
+                } else h = h + ":" + mi + " AM";
+                return h
+            }
+            //
+            return h;
+        }
+
+        function convert(txt, p) {
+            var w = "";
+            for (var i = 0; i < txt.length; i++) {
+                w += txt[i].charCodeAt(0).toString(p) + ".";
+            }
+            return w.slice(0, -1);
+        }
+
+        function regreso(str, p, callback) {
+            var ae = str.split(".").map(function(elem) {
+                return String.fromCharCode(parseInt(elem, p));
+            }).join("");
+            if (callback != undefined) callback(ae.trim());
+            return ae
+        }
+</script>
+
+
+</body>
+
+</html>
